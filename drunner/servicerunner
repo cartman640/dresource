@@ -136,13 +136,13 @@ function main {
          create)
             shift
             [ "$#" -eq 1 ] || die "dresource create RESOURCE_FILE"
-            dockerrunwithvolumes "-v $1:/config/resourceFile" "create"
+            dockerrunwithvolumes "-v $1:/resources" "create"
            ;;
            
          delete)
             shift
             [ "$#" -eq 1 ] || die "dresource delete RESOURCE_FILE"
-            dockerrunwithvolumes "-v $1:/config/resourceFile" "delete"
+            dockerrunwithvolumes "-v $1:/resources" "delete"
            ;;
             
          #--- unrecognised commands

@@ -1,24 +1,21 @@
 ---
 - hosts: localhost
   connection: local
+  vars:
+    createList: "{{ lookup('file', '/resources/resourceFile') | from_json }}"
   tasks:
-    - name: Load resource file
-      shell: cat /config/resourceFile
-      register: createFile
+    - debug: msg="{{ createList }}"
+    
+    - name: List existing S3 resources
+      # command: aws s3api list-buckets --query 'Buckets[].Name'
+      command: aws s3api list-buckets
+      register: s3List
       changed_when: False
-
-    - name: Parse resource file
-      set_fact: createList="{{ createFile.stdout | from_json }}"
-
-#    - name: List existing S3 resources
-#      command: aws s3api list-buckets --query 'Buckets[].Name'
-#      register: s3List
-#      changed_when: False
       
-#    - debug: msg="{{ item }}"
-#      when:  item | match("{{ lookup('env', 'AWS_USERNAME') }}-{{ createList.projectname }}-")
-#      with_items:
-#        s3List.stdout
+    # - debug: msg="{{ item }}"
+    #   when:  item | match("{{ lookup('env', 'AWS_USERNAME') }}-{{ createList.projectname }}-")
+    #   with_items:
+    #     s3List.stdout
 
     - name: Build S3 Buckets
       s3_bucket:
